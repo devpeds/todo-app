@@ -21,7 +21,8 @@ var app = app || {};
 		events: {
 			'keypress #new-todo': 'createOnEnter',
 			'click #clear-completed': 'clearCompleted',
-			'click #toggle-all': 'toggleAllComplete'
+			'click #toggle-all': 'toggleAllComplete',
+			'click #priority': 'setPriorityClass'
 		},
 
 		// At initialization we bind to the relevant events on the `Todos`
@@ -30,6 +31,7 @@ var app = app || {};
 		initialize: function () {
 			this.allCheckbox = this.$('#toggle-all')[0];
 			this.$input = this.$('#new-todo');
+			this.$priority = this.$('#priority');
 			this.$footer = this.$('#footer');
 			this.$main = this.$('#main');
 			this.$list = $('#todo-list');
@@ -51,14 +53,18 @@ var app = app || {};
 		render: function () {
 			var completed = app.todos.completed().length;
 			var remaining = app.todos.remaining().length;
+			var priority = app.todos.priority();
 
+
+			console.log(completed, remaining, priority);
 			if (app.todos.length) {
 				this.$main.show();
 				this.$footer.show();
 
 				this.$footer.html(this.statsTemplate({
 					completed: completed,
-					remaining: remaining
+					remaining: remaining,
+					priority: priority
 				}));
 
 				this.$('#filters li a')
@@ -96,10 +102,14 @@ var app = app || {};
 
 		// Generate the attributes for a new Todo item.
 		newAttributes: function () {
+			var priority = this.$priority.hasClass('super') ? 3 : (
+											this.$priority.hasClass('high') ? 2 : (
+									 	 		this.$priority.hasClass('priority') ? 1 : 0));
 			return {
 				title: this.$input.val().trim(),
 				order: app.todos.nextOrder(),
-				completed: false
+				completed: false,
+				priority: priority
 			};
 		},
 
@@ -109,6 +119,8 @@ var app = app || {};
 			if (e.which === ENTER_KEY && this.$input.val().trim()) {
 				app.todos.create(this.newAttributes());
 				this.$input.val('');
+				this.$priority.removeClass();
+
 			}
 		},
 
@@ -126,6 +138,23 @@ var app = app || {};
 					completed: completed
 				});
 			});
+		},
+
+		setPriorityClass: function () {
+			this.$input.focus();
+			if (!this.$priority.hasClass('priority')) {
+				this.$priority.addClass('priority');
+			} else {
+				if (this.$priority.hasClass('high')) {
+					this.$priority.removeClass('high');
+					this.$priority.addClass('super');
+				} else if (this.$priority.hasClass('super')) {
+					this.$priority.removeClass('super');
+					this.$priority.removeClass('priority');
+				} else {
+					this.$priority.addClass('high');
+				}
+			}
 		}
 	});
 })(jQuery);

@@ -114,7 +114,7 @@ input[type="checkbox"] {
 .edit {
 	position: relative;
 	margin: 0;
-	width: 100%;
+	width: 93%;
 	font-size: 24px;
 	font-family: inherit;
 	line-height: 1.4em;
@@ -171,7 +171,52 @@ label[for='toggle-all'] {
 }
 
 #toggle-all:checked:before {
+	color: #85ada7;
+}
+
+label[for='priority'] {
+	display: none;
+}
+
+
+#priority {
+	position: absolute;
+	background: rgba(0, 0, 0, 0.02);
+	top: 15px;
+	right: 0px;
+	width: 7%;
+	height: 65px;
+	line-height: 70px;
+	text-align: center;
+	z-index: 2;
+	/* Mobile Safari */
+	border: none;
+	-webkit-appearance: none;
+	-ms-appearance: none;
+	-o-appearance: none;
+	appearance: none;
+}
+
+#priority:after {
+	content: '!';
+	font-size: 28px;
 	color: #737373;
+	padding: 0 0 7px;
+}
+
+#priority.priority:after {
+	color: #e2c55e;
+}
+
+#priority.high:after {
+	content: '!!';
+	color: #dd9465;
+
+}
+
+#priority.super:after {
+	content: '!!!';
+	color: #d66;
 }
 
 #todo-list {
@@ -283,10 +328,26 @@ label[for='toggle-all'] {
 }
 
 #todo-list li.priority:not(.completed) label {
+	color: #e2c55e;
+}
+
+#todo-list li.high:not(.completed) label {
+	color: #dd9465;
+}
+
+#todo-list li.super:not(.completed) label {
 	color: #d66;
 }
 
 #todo-list li.priority .priority-btn:after {
+	color: #e2c55e;
+}
+#todo-list li.high .priority-btn:after {
+	content: '!!';
+	color: #dd9465;
+}
+#todo-list li.super .priority-btn:after {
+	content: '!!!';
 	color: #d66;
 }
 
